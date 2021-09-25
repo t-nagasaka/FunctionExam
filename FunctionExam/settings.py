@@ -124,3 +124,5 @@ STATICFIELES_DIRS = (STATIC_DIR)
 
 MEDIA_ROOT = BASE_DIR.joinpath('media')
 MEDIA_URL = '/media/'
+
+AUTH_USER_MODEL = 'accounts.Users'
