@@ -17,5 +17,4 @@ def regist(request):
             regist_form.add_error('password', e)
     return render(request, 'accounts/regist.html', context={
         'regist_form': regist_form, 
-        
     })
