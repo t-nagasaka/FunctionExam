@@ -5,5 +5,11 @@
       <div>{{ message.message }}</div>
     {% endfor %}
   {% endif %}
+
+  <form method="POST">
+    {% csrf_token %}
+    {{ login_form.as_p }}
+    <input type="submit" value="ログイン">
+  </form>
   ホーム画面です。
 {% endblock content %}
