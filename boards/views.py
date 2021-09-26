@@ -10,7 +10,7 @@ def create_theme(request):
         create_theme_form.instance.user = request.user
         create_theme_form.save()
         messages.success(request, '掲示板を作成しました。')
-        return redirect('accounts:home')
+        return redirect('boards:list_themes')
     return render(
         request, 'boards/create_theme.html', context={
             'create_theme_form': create_theme_form
