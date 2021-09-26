@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import update_session_auth_hash
 
 
 def home(request):
@@ -56,3 +57,31 @@ def user_logout(request):
     logout(request)
     messages.success(request, 'ログアウトしました')
     return redirect('accounts:home')
+
+
+@login_required
+def user_edit(request):
+    user_edit_form = forms.UserEditForm(
+        request.POST or None, request.FILES or None, instance=request.user)
+    if user_edit_form.is_valid():
+        messages.success(request, '更新完了しました')
+        user_edit_form.save()
+    return render(request, 'accounts/user_edit.html', context={
+        'user_edit_form': user_edit_form
+    })
+
+
+@login_required
+def change_password(request):
+    password_change_form = forms.PasswordChangeForm(
+        request.POST or None, instance=request.user)
+    if password_change_form.is_valid():
+        try:
+            password_change_form.save()
+            messages.success(request, 'パスワード更新完了しました')
+            update_session_auth_hash(request, request.user)
+        except ValidationError as e:
+            password_change_form.add_error('password', e)
+    return render(request, 'accounts/chage_password.html', context={
+        'password_change_form': password_change_form
+    })
