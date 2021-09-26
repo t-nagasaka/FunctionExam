@@ -18,8 +18,6 @@ class RegistForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        print(type(cleaned_data))
-        print(dir(cleaned_data))
         password = cleaned_data['password']
         confirm_password = cleaned_data['confirm_password']
         if password != confirm_password:
