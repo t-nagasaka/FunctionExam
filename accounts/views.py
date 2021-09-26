@@ -82,6 +82,6 @@ def change_password(request):
             update_session_auth_hash(request, request.user)
         except ValidationError as e:
             password_change_form.add_error('password', e)
-    return render(request, 'accounts/chage_password.html', context={
+    return render(request, 'accounts/change_password.html', context={
         'password_change_form': password_change_form
     })
