@@ -41,3 +41,19 @@ def edit_theme(request, id):
         'edit_theme_form': edit_theme_form,
         'id': id
     })
+
+
+def delete_theme(request, id):
+    theme = get_object_or_404(Themes, id=id)
+    if theme.user.id != request.user.id:
+        raise Http404
+    delete_theme_form = forms.DeleteThemeForm(request.POST or None)
+    if delete_theme_form.is_valid():
+        theme.delete()
+        messages.success(request, '掲示板を削除しました')
+        return redirect('boards:list_themes')
+    return render(
+        request, 'boards/delete_theme.html', context={
+            'delete_theme_form': delete_theme_form
+        }
+    )
