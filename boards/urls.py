@@ -8,4 +8,5 @@ urlpatterns = [
     path('list_themes', views.list_themes, name='list_themes'),
     path('edit_theme/<int:id>', views.edit_theme, name='edit_theme'),
     path('delete_theme/<int:id>', views.delete_theme, name='delete_theme'),
+    path('post_comments/<int:theme_id>', views.post_comments, name='post_comments'),
 ]

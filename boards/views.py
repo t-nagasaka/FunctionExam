@@ -57,3 +57,19 @@ def delete_theme(request, id):
             'delete_theme_form': delete_theme_form
         }
     )
+
+
+def post_comments(request, theme_id):
+    post_comment_form = forms.PostCommentForm(request.POST or None)
+    theme = get_object_or_404(Themes, id=theme_id)
+    if post_comment_form.is_valid():
+        post_comment_form.instance.theme = theme
+        post_comment_form.instance.user = request.user
+        post_comment_form.save()
+        return redirect('boards:post_comments', theme_id=theme_id)
+    return render(
+        request, 'boards/post_comments.html', context={
+            'post_comment_form': post_comment_form,
+            'theme': theme
+        }
+    )

@@ -15,3 +15,13 @@ class DeleteThemeForm(forms.ModelForm):
     class Meta:
         model = Themes
         fields = []
+
+
+class PostCommentForm(forms.ModelForm):
+    comment = forms.CharField(
+        label='', widget=forms.Textarea(
+            attrs={'rows': 5, 'cols': 15}))
+
+    class Meta:
+        model = Comments
+        fields = ('comment',)
