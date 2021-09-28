@@ -3,6 +3,8 @@ from .models import Comments, Themes
 from django.shortcuts import get_object_or_404, render, redirect
 from . import forms
 from django.contrib import messages
+from django.core.cache import cache
+from django.http import JsonResponse
 
 
 def create_theme(request):
@@ -64,6 +66,8 @@ def post_comments(request, theme_id):
     theme = get_object_or_404(Themes, id=theme_id)
     comments = Comments.objects.fetch_by_theme_id(theme_id)
     if post_comment_form.is_valid():
+        if not request.user.authenticated:
+            raise Http404
         post_comment_form.instance.theme = theme
         post_comment_form.instance.user = request.user
         post_comment_form.save()
@@ -75,3 +79,14 @@ def post_comments(request, theme_id):
             'comments': comments
         }
     )
+
+
+def save_comment(request):
+    if request.is_ajax:
+        comment = request.GET.get('comment')
+        theme_id = request.GET.get('theme_id')
+        if comment and theme_id:
+            cache.set(
+                f'saved_comment-theme_id={theme_id}-user_id={request.user.id}',
+                comment)
+            return JsonResponse({'message': '一時保存しました！'})
